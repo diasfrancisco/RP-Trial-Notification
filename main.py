@@ -47,7 +47,9 @@ class ClinicalTrialsRP:
 
             for id in ids:
                 trial = self.check_records(id)
-                if not None:
+                if trial == 'ID exists':
+                    continue
+                else:
                     trials.append(trial)
                     
             if trials:
@@ -58,13 +60,14 @@ class ClinicalTrialsRP:
         # Query the database for the ids currently present
         db = DatabaseStorage()
         db_ids = db.query_ids()
+        db_ids = [i[0] for i in db_ids]
         
         # If the id is not present then we create a trial object which holds all the metadata
         if id not in db_ids:
             trial = self.create_records(id)
             return trial
         else:
-            return None
+            return 'ID exists'
             
     def create_records(self, id):
         # Iterate through every study
