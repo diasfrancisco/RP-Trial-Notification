@@ -4,23 +4,20 @@ import config
 
 
 class DatabaseStorage:
-    def __init__(self):
-        self.conn = psycopg2.connect(
+    def _get_db_details(self):
+        """
+        Grabs the details of the database
+        """        
+        conn = None
+        
+        try:
+            conn = psycopg2.connect(
                 host = config.DB_CREDENTIALS['host'],
                 database = config.DB_CREDENTIALS['database'],
                 port = config.DB_CREDENTIALS['port'],
                 user = config.DB_CREDENTIALS['credentials']['username'],
                 password = config.DB_CREDENTIALS['credentials']['password']
             )
-    
-    def _get_db_details(self):
-        """
-        Creates a database connection
-        """        
-        conn = None
-        
-        try:
-            conn = self.conn
             
             cur = conn.cursor()
             
@@ -41,7 +38,13 @@ class DatabaseStorage:
         conn = None
         
         try:
-            conn = self.conn
+            conn = psycopg2.connect(
+                host = config.DB_CREDENTIALS['host'],
+                database = config.DB_CREDENTIALS['database'],
+                port = config.DB_CREDENTIALS['port'],
+                user = config.DB_CREDENTIALS['credentials']['username'],
+                password = config.DB_CREDENTIALS['credentials']['password']
+            )
             
             cur = conn.cursor()
             cur.execute(
@@ -64,13 +67,13 @@ class DatabaseStorage:
                     '''
                     CREATE TABLE rp_trials (
                         id VARCHAR(30),
-                        title VARCHAR(255),
-                        authors VARCHAR(255),
-                        organization VARCHAR(255),
-                        summary VARCHAR(1000),
-                        start_date DATE,
-                        primary_date DATE,
-                        end_date DATE
+                        title VARCHAR(1000),
+                        authors VARCHAR(500),
+                        organization VARCHAR(500),
+                        summary VARCHAR(2000),
+                        start_date VARCHAR(20),
+                        primary_date VARCHAR(20),
+                        end_date VARCHAR(20)
                     );
                     '''
                 )
@@ -86,7 +89,13 @@ class DatabaseStorage:
         conn = None
         
         try:
-            conn = self.conn
+            conn = psycopg2.connect(
+                host = config.DB_CREDENTIALS['host'],
+                database = config.DB_CREDENTIALS['database'],
+                port = config.DB_CREDENTIALS['port'],
+                user = config.DB_CREDENTIALS['credentials']['username'],
+                password = config.DB_CREDENTIALS['credentials']['password']
+            )
             
             cur = conn.cursor()
             cur.execute(
@@ -96,7 +105,7 @@ class DatabaseStorage:
             )
             db_ids = cur.fetchall()
             cur.close()
-            
+
             return db_ids
         except (Exception, psycopg2.DatabaseError) as err:
             print(err)
@@ -104,33 +113,29 @@ class DatabaseStorage:
             if conn is not None:
                 conn.close()
     
-    def insert_data(self):
+    def insert_data(self, trial):
         conn = None
         
         try:
-            conn = self.conn
+            conn = psycopg2.connect(
+                host = config.DB_CREDENTIALS['host'],
+                database = config.DB_CREDENTIALS['database'],
+                port = config.DB_CREDENTIALS['port'],
+                user = config.DB_CREDENTIALS['credentials']['username'],
+                password = config.DB_CREDENTIALS['credentials']['password']
+            )
             
             cur = conn.cursor()
             cur.execute(
-                '''
-                SELECT * FROM rp_trials;
+                f'''
+                INSERT INTO rp_trials(id, title, authors, organization, summary, start_date, primary_date, end_date)
+                VALUES ({trial.id}, {trial.title}, {trial.authors}, {trial.org}, {trial.summary}, {trial.start_date}, {trial.primary_date}, {trial.end_date})
                 '''
             )
-            db_ids = cur.fetchall()
+            conn.commit()
             cur.close()
-            
-            return db_ids
         except (Exception, psycopg2.DatabaseError) as err:
             print(err)
         finally:
             if conn is not None:
                 conn.close()
-    
-    
-def test():
-    db_test = DatabaseStorage()
-    # db_test._get_db_details()
-    # db_test.create_table()
-    # db_test.query_ids()
-    
-test()
