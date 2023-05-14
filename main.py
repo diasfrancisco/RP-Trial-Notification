@@ -52,7 +52,8 @@ class ClinicalTrialsRP:
                     
             if trials:
                 for trial in trials:
-                    db.insert_data(trial)
+                    print(type(trial.title))
+                    # db.insert_data(trial)
             
     def check_records(self, id):
         # Query the database for the ids currently present

@@ -129,7 +129,7 @@ class DatabaseStorage:
             cur.execute(
                 f'''
                 INSERT INTO rp_trials(id, title, authors, organization, summary, start_date, primary_date, end_date)
-                VALUES ({trial.id}, {trial.title}, {trial.authors}, {trial.org}, {trial.summary}, {trial.start_date}, {trial.primary_date}, {trial.end_date})
+                VALUES ('{trial.id}', '{trial.title}', '{trial.authors}', '{trial.org}', '{trial.summary}', '{trial.start_date}', '{trial.primary_date}', '{trial.end_date}')
                 '''
             )
             conn.commit()
