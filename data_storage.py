@@ -20,7 +20,6 @@ class DatabaseStorage:
         conn = None
         
         try:
-            print('Connecting to PostgreSQL database...')
             conn = self.conn
             
             cur = conn.cursor()
@@ -37,13 +36,11 @@ class DatabaseStorage:
         finally:
             if conn is not None:
                 conn.close()
-                print('Database connection closed')
                 
     def create_table(self):
         conn = None
         
         try:
-            print('Connecting to PostgreSQL database...')
             conn = self.conn
             
             cur = conn.cursor()
@@ -61,10 +58,8 @@ class DatabaseStorage:
             does_table_exist = cur.fetchone()
             
             if does_table_exist[0]:
-                print('Table exists')
                 cur.close()
             else:
-                print('Creating table...')
                 cur.execute(
                     '''
                     CREATE TABLE rp_trials (
@@ -79,7 +74,6 @@ class DatabaseStorage:
                     );
                     '''
                 )
-                print('Created table')
                 conn.commit()
                 cur.close()
         except (Exception, psycopg2.DatabaseError) as err:
@@ -87,18 +81,56 @@ class DatabaseStorage:
         finally:
             if conn is not None:
                 conn.close()
-                print('Database connection closed')
                 
     def query_ids(self):
-        pass
+        conn = None
+        
+        try:
+            conn = self.conn
+            
+            cur = conn.cursor()
+            cur.execute(
+                '''
+                SELECT id FROM rp_trials;
+                '''
+            )
+            db_ids = cur.fetchall()
+            cur.close()
+            
+            return db_ids
+        except (Exception, psycopg2.DatabaseError) as err:
+            print(err)
+        finally:
+            if conn is not None:
+                conn.close()
     
     def insert_data(self):
-        pass
+        conn = None
+        
+        try:
+            conn = self.conn
+            
+            cur = conn.cursor()
+            cur.execute(
+                '''
+                SELECT * FROM rp_trials;
+                '''
+            )
+            db_ids = cur.fetchall()
+            cur.close()
+            
+            return db_ids
+        except (Exception, psycopg2.DatabaseError) as err:
+            print(err)
+        finally:
+            if conn is not None:
+                conn.close()
     
     
 def test():
     db_test = DatabaseStorage()
     # db_test._get_db_details()
-    db_test.create_table()
+    # db_test.create_table()
+    # db_test.query_ids()
     
 test()
