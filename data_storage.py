@@ -66,11 +66,11 @@ class DatabaseStorage:
                 cur.execute(
                     '''
                     CREATE TABLE rp_trials (
-                        id VARCHAR(30),
+                        id VARCHAR(30) PRIMARY KEY,
                         title VARCHAR(1000),
                         authors VARCHAR(500),
                         organization VARCHAR(500),
-                        summary VARCHAR(2000),
+                        summary VARCHAR(8000),
                         start_date VARCHAR(20),
                         primary_date VARCHAR(20),
                         end_date VARCHAR(20)
