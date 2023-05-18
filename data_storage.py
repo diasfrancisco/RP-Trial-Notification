@@ -4,6 +4,8 @@ import config
 
 
 class DatabaseStorage:
+    """Stores and accesses the data within the database
+    """    
     def _get_db_details(self):
         """
         Grabs the details of the database
@@ -35,6 +37,8 @@ class DatabaseStorage:
                 conn.close()
                 
     def create_table(self):
+        """Creates a table to store the details of the trial if one does not exist
+        """        
         conn = None
         
         try:
@@ -86,6 +90,11 @@ class DatabaseStorage:
                 conn.close()
                 
     def query_ids(self):
+        """Queries the database for the list of ids currently present
+
+        Returns:
+            list(tuple): IDs currently present
+        """        
         conn = None
         
         try:
@@ -114,6 +123,11 @@ class DatabaseStorage:
                 conn.close()
     
     def insert_data(self, trial):
+        """Insert
+
+        Args:
+            trial (_type_): _description_
+        """        
         conn = None
         
         try:
